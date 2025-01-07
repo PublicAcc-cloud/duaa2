@@ -1,0 +1,336 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>دعاء العهد</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            margin-top: 50px;
+            margin-bottom: 50px;
+            background: url('bg1.jpg') no-repeat center center fixed;
+            background-size: cover;
+        }
+        .main-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: rgba(183, 221, 226, 0.6);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+        .buttons-container {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 5px;
+            width: 75%;
+            justify-content: center;
+            margin-top: 100px;
+        }
+        .redirect-button {
+            background-color: #74bca3;
+            border: none;
+            color: white;
+            padding: 5px 10px; /* Reduced padding to make buttons smaller */
+            text-align: center;
+            text-decoration: none;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            font-size: 12px; /* Reduced font size to make buttons smaller */
+            cursor: pointer;
+            border-radius: 8px;
+            word-wrap: break-word;
+        }
+        .redirect-button.small {
+            width: 100%; /* Ensure button takes full column width */
+            height: auto; /* Ensure button adapts to content */
+        }
+        .redirect-button[disabled] {
+            background-color: gray;
+            cursor: not-allowed;
+        }
+        .redirect-button.red {
+            background-color: red;
+            cursor: not-allowed;
+        }
+        .prompt-container {
+            display: none;
+            text-align: center;
+            margin-top: 50px;
+        }
+        .prompt-button, .cancel-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 15px 32px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 12px;
+        }
+        .cancel-button {
+            background-color: #f44336;
+        }
+        .clear-data-container {
+            margin-top: 20px;
+            text-align: center;
+        }
+
+        .clear-data-button {
+            background-color: #f44336;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 12px;
+        }
+        .hidden {
+            display: none;
+        }
+        .delete-day-button {
+            background-color: #ff6347; /* A nice tomato color */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-day-button:hover {
+            background-color: #ff4500; /* A darker shade for hover effect */
+        }
+        .delete-day-button {
+            background-color: #ff6347; /* A nice tomato color */
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 12px;
+            transition: background-color 0.3s ease;
+        }
+
+        .delete-day-button:hover {
+            background-color: #ff4500; /* A darker shade for hover effect */
+        }
+
+        /* Style for the dropdown */
+        #daySelect {
+            width: 200px;
+            padding: 10px;
+            font-size: 16px;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+            background-color: #f9f9f9;
+            color: #333;
+            margin-bottom: 10px;
+            transition: border-color 0.3s ease, background-color 0.3s ease;
+        }
+
+        #daySelect:hover {
+            background-color: #e9e9e9;
+        }
+
+        #daySelect:focus {
+            border-color: #007BFF;
+            outline: none;
+            background-color: #fff;
+        }
+        .delete-container {
+            max-width: 1200px;
+            margin: auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            background-color: rgba(183, 221, 226, 0.6);
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            min-height: auto;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="main-container">
+        <h1>اهلا بكم في مبادرة قراءة دعاء العهد</h1>
+        <div id="greeting-container"></div>
+        <h3>اختر احد المربعات باللون الاخضر للمشاركة في قرائة الدعاء</h3>
+        <div class="buttons-container" id="buttons-container"></div>
+        <div class="delete-day-container hidden" id="delete-day-container">
+            <h4>مسح يوم محدد</h4>
+            <select id="daySelect">
+                <option value="" disabled selected>اختر اليوم</option>
+            </select>
+            <button class="delete-day-button" onclick="deleteDayData()">مسح اليوم</button>
+        </div>
+        <h4><br><br><br><br><br><br><br><br><br><br><br>بعد الانتهاء من قراءة الدعاء لمدة 40 يوم يرجى اخذ لقطة للشاشة وارسالها الى د.فرح السهلاوي<br> <a href="https://www.instagram.com/dr_farah_alsahlawi2_?igsh=MXZjcTZ5MjJsYTRhZg==">Instagram</a></h4>
+        <div class="prompt-container" id="prompt-container">
+            <h2>:رجاء ادخل اسمك</h2>
+            <input type="text" id="nameInput" placeholder="Your name">
+            <h2>ما هي كليتك:</h2>
+            <input type="text" id="cityInput" placeholder="Your college">
+            <h2>:ما هي مرحلتك</h2>
+            <input type="text" id="ageInput" placeholder="Your stage">
+            <br><br>
+            <button class="prompt-button" onclick="confirmName()">تاكيد</button>
+        </div>
+    </div>
+        <div class="delete-container hidden" id="delete-container">
+            <button class="prompt-button" onclick="showClear()">المزيد</button>
+            <div class="clear-data-container hidden" id="clear-data-container">
+                <h3 class="hi hidden" id="hi">لمسح بيانات المستخدم كاملة</h3>
+                <button class="clear-data-button hidden" id="clear-data-button" onclick="clearData()">مسح البيانات</button>
+        </div>
+    <script>
+        function confirmName() {
+            const name = document.getElementById('nameInput').value;
+            const city = document.getElementById('cityInput').value;
+            const age = document.getElementById('ageInput').value;
+            if (name && city && age) {
+                localStorage.setItem('readerName', name);
+                localStorage.setItem('readerCity', city);
+                localStorage.setItem('readerAge', age);
+                document.getElementById('greeting-container').innerHTML = `<h2>مرحبًا، ${name}<br> من كلية ${city}<br> المرحلة ${age}!</h2>`;
+                document.getElementById('prompt-container').style.display = 'none';
+                document.getElementById('buttons-container').style.display = 'grid';
+                document.getElementById('delete-day-container').classList.remove('hidden');
+                document.getElementById('delete-container').classList.remove('hidden');
+                populateDaySelect();
+                updateButtons();
+            } else {
+                alert(".رجاء ادخل جميع التفاصيل");
+            }
+        }
+        function showClear() {
+            if(showClear) {
+                document.getElementById('clear-data-container').classList.remove('hidden');
+                document.getElementById('clear-data-button').classList.remove('hidden');
+                document.getElementById('hi').classList.remove('hidden');
+            }
+        }
+        function checkName() {
+            const name = localStorage.getItem('readerName');
+            const city = localStorage.getItem('readerCity');
+            const age = localStorage.getItem('readerAge');
+            if (name && city && age) {
+                document.getElementById('greeting-container').innerHTML = `<h2>مرحبًا، ${name} من ${city}، المرحلة ${age}!</h2>`;
+                document.getElementById('buttons-container').style.display = 'grid';
+                document.getElementById('clear-data-container').classList.remove('hidden');
+                document.getElementById('delete-day-container').classList.remove('hidden');
+                populateDaySelect();
+                updateButtons();
+            } else {
+                document.getElementById('prompt-container').style.display = 'block';
+                document.getElementById('buttons-container').style.display = 'none';
+                document.getElementById('delete-day-container').classList.add('hidden');
+            }
+        }
+
+        function finishReading(index) {
+            const finishTime = new Date().toLocaleString();
+            localStorage.setItem('button_' + index, finishTime);
+            window.location.href = "story.html";
+        }
+
+        function markButtonAsFailed(index, reason) {
+            localStorage.setItem('button_' + index, reason);
+            window.location.href = "story.html";
+        }
+
+        function updateButtons() {
+            const container = document.getElementById('buttons-container');
+            container.innerHTML = '';
+            for (let i = 1; i <= 40; i++) {
+                const button = document.createElement('button');
+                button.className = 'redirect-button small';
+                button.textContent = 'اليوم ' + i;
+                const finishTime = localStorage.getItem('button_' + i);
+                if (finishTime) {
+                    if (finishTime === 'cancelled' || finishTime === 'timed out') {
+                        button.className += ' red';
+                        button.textContent += ` (${finishTime})`;
+                        button.onclick = () => {
+                            localStorage.setItem('buttonIndex', i);
+                            finishReading(i);
+                        };
+                    } else {
+                        button.innerHTML += `<br><small>${finishTime}</small>`;
+                        button.disabled = true;
+                    }
+                } else {
+                    button.onclick = () => {
+                        localStorage.setItem('buttonIndex', i);
+                        finishReading(i);
+                    };
+                }
+                container.appendChild(button);
+            }
+        }
+
+        function clearData() {
+            if (confirm("سيتم مسح معلومات القارئ مع الايام التي تم تسجيلها.هل أنت متأكد أنك تريد مسح كل البيانات؟")) {
+                if (confirm("هل انت حقا متاكد من حذف جميع بياناتك؟")) {
+                localStorage.clear();
+                alert("تم مسح البيانات!");
+                window.location.reload();
+            }
+        }
+        }
+
+        function deleteDayData() {
+            const day = document.getElementById('daySelect').value;
+            if (day && day > 0 && day <= 40) {
+                if (confirm("هل أنت متأكد أنك تريد مسح اليوم المحدد؟")) {
+                    localStorage.removeItem('button_' + day);
+                    alert("تم مسح بيانات اليوم " + day + " بنجاح!");
+                    updateButtons();
+                }
+            } else {
+                alert("يرجى اختيار رقم يوم صالح (بين 1 و 40).");
+            }
+        }
+
+        function populateDaySelect() {
+            const daySelect = document.getElementById('daySelect');
+            daySelect.innerHTML = '<option value="" disabled selected>اختر اليوم</option>';
+            for (let i = 1; i <= 40; i++) {
+                const option = document.createElement('option');
+                option.value = i;
+                option.textContent = 'اليوم ' + i;
+                daySelect.appendChild(option);
+            }
+        }
+
+        window.onload = checkName;
+
+    </script>
+</body>
+</html>
