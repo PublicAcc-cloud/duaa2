@@ -20,7 +20,7 @@
             border: 1px solid #ccc;
             border-radius: 8px;
             background-color: rgba(183, 221, 226, 0.6);
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            /*box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);*/
             min-height: 100vh;
             display: flex;
             flex-direction: column;
@@ -176,6 +176,21 @@
             align-items: center;
             margin-top: 10px;
         }
+        .screenshot-container {     
+            margin-top: 20px; 
+        }
+        .ss-button {
+            background-color: #74bca3;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 12px;
+        }
     </style>
 </head>
 <body>
@@ -184,13 +199,6 @@
         <div id="greeting-container"></div>
         <h3>اختر احد المربعات باللون الاخضر للمشاركة في قرائة الدعاء</h3>
         <div class="buttons-container" id="buttons-container"></div>
-        <div class="delete-day-container hidden" id="delete-day-container">
-            <h4>مسح يوم محدد</h4>
-            <select id="daySelect">
-                <option value="" disabled selected>اختر اليوم</option>
-            </select>
-            <button class="delete-day-button" onclick="deleteDayData()">مسح اليوم</button>
-        </div>
         <h4><br><br><br><br><br><br><br><br><br><br><br>بعد الانتهاء من قراءة الدعاء لمدة 40 يوم يرجى اخذ لقطة للشاشة وارسالها الى د.فرح السهلاوي<br> <a href="https://www.instagram.com/dr_farah_alsahlawi2_?igsh=MXZjcTZ5MjJsYTRhZg==">Instagram</a></h4>
         <div class="prompt-container" id="prompt-container">
             <h2>:رجاء ادخل اسمك</h2>
@@ -203,13 +211,32 @@
             <button class="prompt-button" onclick="confirmName()">تاكيد</button>
         </div>
     </div>
+    <div class="screenshot-container"> 
+        <button onclick="takeScreenshot()" class="ss-button">اخذ لقطة للشاشة</button> 
+    </div>
         <div class="delete-container hidden" id="delete-container">
+            <div class="delete-day-container hidden" id="delete-day-container">
+                <h4>مسح يوم محدد</h4>
+                <select id="daySelect">
+                    <option value="" disabled selected>اختر اليوم</option>
+                </select>
+                <button class="delete-day-button" onclick="deleteDayData()">مسح اليوم</button>
+            </div>
             <button class="prompt-button" onclick="showClear()">المزيد</button>
             <div class="clear-data-container hidden" id="clear-data-container">
                 <h3 class="hi hidden" id="hi">لمسح بيانات المستخدم كاملة</h3>
                 <button class="clear-data-button hidden" id="clear-data-button" onclick="clearData()">مسح البيانات</button>
         </div>
+    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
     <script>
+        function takeScreenshot() { 
+            const element = document.querySelector('.main-container'); 
+            html2canvas(element).then(canvas => { const imgData = canvas.toDataURL('image/png'); 
+            const link = document.createElement('a'); 
+            link.href = imgData; 
+            link.download = 'شهادة.png'; 
+            link.click(); }); 
+        }
         function confirmName() {
             const name = document.getElementById('nameInput').value;
             const city = document.getElementById('cityInput').value;
